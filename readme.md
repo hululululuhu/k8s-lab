@@ -1,3 +1,5 @@
+before run it, need install docker and minikube.
+
 1. create mysql container
    ```bash
    ./deployment/deploy-mysql.sh
