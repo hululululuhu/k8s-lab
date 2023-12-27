@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+      role: master
+  template:
+    metadata:
+      labels:
+        app: mysql
+        role: master
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "your-password"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-master-pv-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-master-config
+          mountPath: /etc/mysql/conf.d
+      volumes:
+      - name: mysql-master-pv-storage
+        persistentVolumeClaim:
+          claimName: mysql-master-pv-claim
+      - name: mysql-master-config
+        configMap:
+          name: mysql-master-config
