@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rest-api
+  template:
+    metadata:
+      labels:
+        app: rest-api
+    spec:
+      containers:
+      - name: rest-api
+        image: magiwu/my-python-mysql-app:latest
+        ports:
+        - containerPort: 5000
+        command: [ "python" ]
+        args:
+          - -m
+          - app.api-lab.main
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rest-api
+spec:
+  type: NodePort
+  selector:
+    app: rest-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000

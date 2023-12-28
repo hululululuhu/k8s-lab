@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-slave
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+      role: slave
+  template:
+    metadata:
+      labels:
+        app: mysql
+        role: slave
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "your-password"
+        - name: MYSQL_REPLICATION_MODE
+          value: "slave"
+        - name: MYSQL_REPLICATION_USER
+          value: "repl"
+        - name: MYSQL_REPLICATION_PASSWORD
+          value: "repl-password"
+        - name: MYSQL_MASTER_HOST
+          value: "mysql-master"
+        - name: MYSQL_MASTER_PORT
+          value: "3306"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: mysql-slave-pv-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-slave-config
+          mountPath: /etc/mysql/conf.d
+      volumes:
+      - name: mysql-slave-pv-storage
+        persistentVolumeClaim:
+          claimName: mysql-slave-pv-claim
+      - name: mysql-slave-config
+        configMap:
+          name: mysql-slave-config
