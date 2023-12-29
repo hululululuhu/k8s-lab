@@ -3,9 +3,9 @@
 # setting
 IMAGE_NAME="my-python-mysql-app"
 REGISTRY_URL="hub.docker.com/v2"
-USERNAME="*"
+USERNAME="magiwu"
 NAMESPACE="default"
-YOUR_PASSWORD="*"
+YOUR_PASSWORD="wu1056814738"
 
 # build docker image
 docker build -t ${IMAGE_NAME} -f deployment/Dockerfile .
@@ -23,7 +23,7 @@ echo "push docker image succeed"
 # deploy to k8s
 kubectl config use-context minikube
 kubectl create namespace ${NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply -f deployment/my-app.yaml -n ${NAMESPACE}
+kubectl apply -f deployment/my-api.yaml -n ${NAMESPACE}
 echo "deploy k8s pod succeed"
 
 # remove remote image
