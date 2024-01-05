@@ -39,4 +39,9 @@ def api_query():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
+"""
+kubectl expose deployment rest-api --type=NodePort --port=80 --target-port=8080 --name=api-service
+
+"""
